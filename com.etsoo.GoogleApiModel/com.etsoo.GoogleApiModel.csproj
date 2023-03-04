@@ -15,7 +15,7 @@
     <Description>ETSOO Google API Models
 亿速思维谷歌接口数据模型</Description>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <AssemblyVersion>1.0.1.0</AssemblyVersion>
     <FileVersion>1.0.1.0</FileVersion>
     <PackageIcon>logo.png</PackageIcon>
@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="com.etsoo.ApiModel" Version="1.0.8" />
+    <PackageReference Include="com.etsoo.ApiModel" Version="1.0.9" />
     <PackageReference Include="com.etsoo.WebUtils" Version="1.0.27" />
   </ItemGroup>
 
