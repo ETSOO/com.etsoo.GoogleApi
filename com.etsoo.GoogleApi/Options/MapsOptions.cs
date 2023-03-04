@@ -19,9 +19,9 @@
         public string BaseAddress { get; init; } = "https://maps.googleapis.com/maps/api/";
 
         /// <summary>
-        /// Cache days
-        /// 缓存天数
+        /// Cache hours
+        /// 缓存小时数
         /// </summary>
-        public int CacheDays { get; init; } = 30;
+        public double CacheHours { get; init; } = 24;
     }
 }
