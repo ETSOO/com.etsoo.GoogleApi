@@ -10,19 +10,24 @@
     <RepositoryUrl>https://github.com/ETSOO/com.etsoo.GoogleApi/com.etsoo.GoogleApiModel</RepositoryUrl>
     <Authors>ETSOO SmartERP NextGen Team</Authors>
     <Company>ETSOO / 亿速思维</Company>
-    <Copyright>Copyright © ETSOO 2004 - 2022</Copyright>
+    <Copyright>Copyright © ETSOO 2004 - 2023</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Description>
-      ETSOO Google API Models
-      亿速思维谷歌接口数据模型
-    </Description>
+    <Description>ETSOO Google API Models
+亿速思维谷歌接口数据模型</Description>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <AssemblyVersion>1.0.1.0</AssemblyVersion>
     <FileVersion>1.0.1.0</FileVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="com.etsoo.ApiModel" Version="1.0.8" />
