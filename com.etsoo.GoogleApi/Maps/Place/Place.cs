@@ -1,5 +1,6 @@
 ﻿using com.etsoo.ApiModel.Dto.Maps;
 using com.etsoo.GoogleApiModel.Maps.RQ;
+using System.Text.Json.Serialization;
 
 namespace com.etsoo.GoogleApi.Maps.Place
 {
@@ -16,7 +17,8 @@ namespace com.etsoo.GoogleApi.Maps.Place
     /// <summary>
     /// Business status
     /// </summary>
-    public enum BusinessStatus
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum BusinessStatus : byte
     {
         OPERATIONAL,
         CLOSED_TEMPORARILY,
@@ -28,10 +30,8 @@ namespace com.etsoo.GoogleApi.Maps.Place
     /// </summary>
     public record PlaceOpeningHoursPeriod
     {
-        public required DayOfWeek Day { get; init; }
-        public required string Time { get; init; }
-        public string? Date { get; init; }
-        public bool? Truncated { get; init; }
+        public required PlaceOpeningHoursPeriodDetail Open { get; init; }
+        public PlaceOpeningHoursPeriodDetail? Close { get; init; }
     }
 
     /// <summary>
@@ -39,8 +39,10 @@ namespace com.etsoo.GoogleApi.Maps.Place
     /// </summary>
     public record PlaceOpeningHoursPeriodDetail
     {
-        public required PlaceOpeningHours Open { get; init; }
-        public PlaceOpeningHours? Close { get; init; }
+        public required DayOfWeek Day { get; init; }
+        public required string Time { get; init; }
+        public string? Date { get; init; }
+        public bool? Truncated { get; init; }
     }
 
     /// <summary>
@@ -129,7 +131,7 @@ namespace com.etsoo.GoogleApi.Maps.Place
         public string? OriginalLanguage { get; init; }
         public string? ProfilePhotoUrl { get; init; }
         public string? Text { get; init; }
-        public string? Translated { get; init; }
+        public bool? Translated { get; init; }
     }
 
     /// <summary>
@@ -180,7 +182,8 @@ namespace com.etsoo.GoogleApi.Maps.Place
 
         public PriceLevel? PriceLevel { get; init; }
 
-        public byte? Rating { get; init; }
+        // Average rating
+        public decimal? Rating { get; init; }
 
         public bool? Reservable { get; init; }
 

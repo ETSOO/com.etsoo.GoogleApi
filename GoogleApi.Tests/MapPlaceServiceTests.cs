@@ -30,6 +30,16 @@ namespace GoogleApi.Tests
         }
 
         [TestMethod]
+        public async Task GetDetailsAsyncTest()
+        {
+            // Teletrac Navman
+            var place = (await service.GetPlaceDetailsAsync(new GetDetailsRQ { PlaceId = "ChIJSwRvUEU4DW0R07BlrYJGHZc" }))?.Result;
+            Assert.IsNotNull(place);
+
+            Assert.AreEqual("Teletrac Navman NZ", place.Name);
+        }
+
+        [TestMethod]
         public async Task SearchPlaceAsyncTest()
         {
             var response = await service.SearchPlaceAsync(new SearchPlaceRQ

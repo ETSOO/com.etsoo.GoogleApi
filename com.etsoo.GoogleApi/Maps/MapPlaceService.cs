@@ -32,6 +32,12 @@ namespace com.etsoo.GoogleApi.Maps
         private readonly HttpClient client;
 
         /// <summary>
+        /// Options
+        /// 配置参数
+        /// </summary>
+        public MapsOptions Options => options;
+
+        /// <summary>
         /// Constructor
         /// 构造函数
         /// </summary>

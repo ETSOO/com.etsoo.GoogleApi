@@ -1,4 +1,5 @@
 ﻿using com.etsoo.GoogleApi.Maps.Place;
+using com.etsoo.GoogleApi.Options;
 using com.etsoo.GoogleApiModel.Maps.RQ;
 
 namespace com.etsoo.GoogleApi.Maps
@@ -9,6 +10,12 @@ namespace com.etsoo.GoogleApi.Maps
     /// </summary>
     public interface IMapPlaceService
     {
+        /// <summary>
+        /// Options
+        /// 配置参数
+        /// </summary>
+        MapsOptions Options { get; }
+
         /// <summary>
         /// Async autocomplete
         /// 异步自动填充
