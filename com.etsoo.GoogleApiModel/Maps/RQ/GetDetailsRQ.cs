@@ -45,5 +45,14 @@
         /// A random string which identifies an autocomplete session for billing purposes
         /// </summary>
         public string? SessionToken { get; init; }
+
+        /// <summary>
+        /// Create an unique key for cache
+        /// </summary>
+        /// <returns>Result</returns>
+        public string CreateKey()
+        {
+            return $"{Language}, {PlaceId}, {Fields}, {Region}, {ReviewsNoTranslations}, {ReviewsSort}";
+        }
     }
 }
