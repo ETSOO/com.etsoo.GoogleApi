@@ -1,5 +1,5 @@
 ﻿using com.etsoo.ApiModel.Dto.Maps;
-using com.etsoo.GoogleApiModel.Maps.RQ;
+using com.etsoo.GoogleApi.Maps.Place.RQ;
 using System.Text.Json.Serialization;
 
 namespace com.etsoo.GoogleApi.Maps.Place

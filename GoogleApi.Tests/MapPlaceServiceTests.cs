@@ -1,6 +1,6 @@
 ﻿using com.etsoo.GoogleApi.Maps;
+using com.etsoo.GoogleApi.Maps.Place.RQ;
 using com.etsoo.GoogleApi.Options;
-using com.etsoo.GoogleApiModel.Maps.RQ;
 
 namespace GoogleApi.Tests
 {

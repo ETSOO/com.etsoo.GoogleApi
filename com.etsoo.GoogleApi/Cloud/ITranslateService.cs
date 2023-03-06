@@ -1,4 +1,4 @@
-﻿using com.etsoo.GoogleApiModel.Cloud.RQ;
+﻿using com.etsoo.GoogleApi.Cloud.RQ;
 
 namespace com.etsoo.GoogleApi.Cloud
 {

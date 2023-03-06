@@ -1,7 +1,7 @@
 ﻿using com.etsoo.ApiModel.RQ.Maps;
 using com.etsoo.GoogleApi.Maps.Place;
+using com.etsoo.GoogleApi.Maps.Place.RQ;
 using com.etsoo.GoogleApi.Options;
-using com.etsoo.GoogleApiModel.Maps.RQ;
 using com.etsoo.Utils.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

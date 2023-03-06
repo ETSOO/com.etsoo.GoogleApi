@@ -1,6 +1,6 @@
 ﻿using com.etsoo.ApiModel.Dto.Maps;
 
-namespace com.etsoo.GoogleApiModel.Maps.RQ
+namespace com.etsoo.GoogleApi.Maps.Place.RQ
 {
     /// <summary>
     /// Place autocomplete reqeust data

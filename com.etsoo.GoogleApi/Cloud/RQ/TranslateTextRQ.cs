@@ -1,7 +1,7 @@
 ﻿using com.etsoo.WebUtils.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace com.etsoo.GoogleApiModel.Cloud.RQ
+namespace com.etsoo.GoogleApi.Cloud.RQ
 {
     /// <summary>
     /// Translate text request data

@@ -1,7 +1,7 @@
 ﻿using com.etsoo.ApiModel.Dto.Maps;
 using System.ComponentModel.DataAnnotations;
 
-namespace com.etsoo.GoogleApiModel.Maps.RQ
+namespace com.etsoo.GoogleApi.Maps.Place.RQ
 {
     /// <summary>
     /// Find place input type

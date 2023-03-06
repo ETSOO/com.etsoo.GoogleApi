@@ -1,4 +1,4 @@
-﻿namespace com.etsoo.GoogleApiModel.Maps.RQ
+﻿namespace com.etsoo.GoogleApi.Maps.Place.RQ
 {
     /// <summary>
     /// Place price level

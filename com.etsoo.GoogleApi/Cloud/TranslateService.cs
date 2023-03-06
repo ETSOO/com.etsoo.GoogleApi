@@ -1,5 +1,5 @@
-﻿using com.etsoo.GoogleApi.Options;
-using com.etsoo.GoogleApiModel.Cloud.RQ;
+﻿using com.etsoo.GoogleApi.Cloud.RQ;
+using com.etsoo.GoogleApi.Options;
 using Google.Cloud.Translate.V3;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

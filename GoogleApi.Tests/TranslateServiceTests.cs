@@ -1,6 +1,6 @@
 using com.etsoo.GoogleApi.Cloud;
+using com.etsoo.GoogleApi.Cloud.RQ;
 using com.etsoo.GoogleApi.Options;
-using com.etsoo.GoogleApiModel.Cloud.RQ;
 
 namespace GoogleApi.Tests
 {

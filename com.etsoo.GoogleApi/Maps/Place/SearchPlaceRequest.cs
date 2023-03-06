@@ -1,4 +1,4 @@
-﻿using com.etsoo.GoogleApiModel.Maps.RQ;
+﻿using com.etsoo.GoogleApi.Maps.Place.RQ;
 using com.etsoo.Utils.String;
 
 namespace com.etsoo.GoogleApi.Maps.Place

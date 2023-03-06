@@ -1,7 +1,7 @@
 ﻿using com.etsoo.ApiModel.RQ.Maps;
 using com.etsoo.WebUtils.Attributes;
 
-namespace com.etsoo.GoogleApiModel.Maps.RQ
+namespace com.etsoo.GoogleApi.Maps.Place.RQ
 {
     /// <summary>
     /// Map base request data
