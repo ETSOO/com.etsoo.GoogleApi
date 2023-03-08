@@ -1,7 +1,7 @@
-﻿using com.etsoo.GoogleApi.Maps.Place;
+﻿using com.etsoo.ApiModel.Dto.Maps;
+using com.etsoo.GoogleApi.Maps.Place;
 using com.etsoo.GoogleApi.Maps.Place.RQ;
 using com.etsoo.GoogleApi.Options;
-using CommonPlace = com.etsoo.ApiModel.Dto.Maps.Place;
 
 namespace com.etsoo.GoogleApi.Maps
 {
@@ -60,6 +60,6 @@ namespace com.etsoo.GoogleApi.Maps
         /// <param name="rq">Request data</param>
         /// <param name="token">Cancellation token</param>
         /// <returns>Result</returns>
-        ValueTask<IEnumerable<CommonPlace>?> SearchCommonPlaceAsync(SearchPlaceRQ rq, CancellationToken token = default);
+        ValueTask<IEnumerable<PlaceCommon>?> SearchCommonPlaceAsync(SearchPlaceRQ rq, CancellationToken token = default);
     }
 }

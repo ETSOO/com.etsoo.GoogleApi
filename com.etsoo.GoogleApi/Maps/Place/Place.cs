@@ -1,7 +1,6 @@
 ﻿using com.etsoo.ApiModel.Dto.Maps;
 using com.etsoo.GoogleApi.Maps.Place.RQ;
 using System.Text.Json.Serialization;
-using CommonPlace = com.etsoo.ApiModel.Dto.Maps.Place;
 
 namespace com.etsoo.GoogleApi.Maps.Place
 {
@@ -241,11 +240,11 @@ namespace com.etsoo.GoogleApi.Maps.Place
         /// 创建通用地点
         /// </summary>
         /// <returns>Result</returns>
-        public CommonPlace? CreateCommon()
+        public PlaceCommon? CreateCommon()
         {
             if (string.IsNullOrEmpty(FormattedAddress) || string.IsNullOrEmpty(Name) || Geometry == null || PlaceId == null) return null;
 
-            return new CommonPlace
+            return new PlaceCommon
             {
                 Name = Name,
                 Location = Geometry.Location,

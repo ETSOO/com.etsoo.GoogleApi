@@ -1,4 +1,5 @@
-﻿using com.etsoo.ApiModel.RQ.Maps;
+﻿using com.etsoo.ApiModel.Dto.Maps;
+using com.etsoo.ApiModel.RQ.Maps;
 using com.etsoo.GoogleApi.Maps.Place;
 using com.etsoo.GoogleApi.Maps.Place.RQ;
 using com.etsoo.GoogleApi.Options;
@@ -8,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text.Json;
-using CommonPlace = com.etsoo.ApiModel.Dto.Maps.Place;
 
 namespace com.etsoo.GoogleApi.Maps
 {
@@ -120,7 +120,7 @@ namespace com.etsoo.GoogleApi.Maps
         /// <param name="rq">Request data</param>
         /// <param name="token">Cancellation token</param>
         /// <returns>Result</returns>
-        public async ValueTask<IEnumerable<CommonPlace>?> SearchCommonPlaceAsync(SearchPlaceRQ rq, CancellationToken token = default)
+        public async ValueTask<IEnumerable<PlaceCommon>?> SearchCommonPlaceAsync(SearchPlaceRQ rq, CancellationToken token = default)
         {
             var response = await SearchPlaceAsync(rq, token);
             var results = response?.Results;
