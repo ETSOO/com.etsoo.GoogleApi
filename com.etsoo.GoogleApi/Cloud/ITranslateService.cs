@@ -13,7 +13,8 @@ namespace com.etsoo.GoogleApi.Cloud
         /// 翻译短文本
         /// </summary>
         /// <param name="rq">Request data</param>
+        /// <param name="token">Cancellation token</param>
         /// <returns>Translated text</returns>
-        Task<string> TranslateTextAsync(TranslateTextRQ rq);
+        Task<string> TranslateTextAsync(TranslateTextRQ rq, CancellationToken token = default);
     }
 }

@@ -41,8 +41,9 @@ namespace com.etsoo.GoogleApi.Cloud
         /// 翻译短文本
         /// </summary>
         /// <param name="rq">Request data</param>
+        /// <param name="token">Cancellation token</param>
         /// <returns>Translated text</returns>
-        public async Task<string> TranslateTextAsync(TranslateTextRQ rq)
+        public async Task<string> TranslateTextAsync(TranslateTextRQ rq, CancellationToken token = default)
         {
             var builder = new TranslationServiceClientBuilder
             {
@@ -59,7 +60,7 @@ namespace com.etsoo.GoogleApi.Cloud
                 Parent = options.TranslateProjectId
             };
 
-            var response = await client.TranslateTextAsync(request);
+            var response = await client.TranslateTextAsync(request, token);
             var translation = response.Translations[0];
 
             return translation.TranslatedText;
