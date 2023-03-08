@@ -126,11 +126,11 @@ namespace com.etsoo.GoogleApi.Maps
             var results = response?.Results;
             if (results == null) return null;
 
-            await Parallel.ForEachAsync(results, new ParallelOptions { MaxDegreeOfParallelism = 5, CancellationToken = token }, async (item, CancellationToken) =>
+            await Parallel.ForEachAsync(results, new ParallelOptions { MaxDegreeOfParallelism = 5, CancellationToken = token }, async (item, cancellationToken) =>
             {
                 if (item.PlaceId == null) return;
 
-                var details = await GetPlaceDetailsAsync(new GetDetailsRQ { PlaceId = item.PlaceId, Fields = PlaceField.Address_Components }, CancellationToken);
+                var details = await GetPlaceDetailsAsync(new GetDetailsRQ { PlaceId = item.PlaceId, Fields = PlaceField.Address_Components }, cancellationToken);
                 var components = details?.Result.AddressComponents;
                 if (components is not null) item.AddressComponents = components;
             });

@@ -50,7 +50,7 @@ namespace com.etsoo.GoogleApi.Cloud
                 CredentialsPath = options.CredentialsPath
             };
 
-            var client = await builder.BuildAsync();
+            var client = await builder.BuildAsync(token);
 
             var request = new TranslateTextRequest
             {
