@@ -1,4 +1,5 @@
 ﻿using com.etsoo.ApiModel.Dto.Maps;
+using com.etsoo.ApiModel.RQ.Maps;
 
 namespace com.etsoo.GoogleApi.Maps.Place.RQ
 {
@@ -7,6 +8,24 @@ namespace com.etsoo.GoogleApi.Maps.Place.RQ
     /// </summary>
     public record AutocompleteRQ : MapBaseRQ
     {
+        /// <summary>
+        /// Create from common query request data
+        /// </summary>
+        /// <param name="rq">Request data</param>
+        /// <returns>Result</returns>
+        public static AutocompleteRQ CreateFrom(PlaceQueryRQ rq)
+        {
+            return new AutocompleteRQ
+            {
+                Output = rq.Output,
+                Input = rq.Query,
+                Location= rq.Location,
+                Radius = rq.Radius,
+                Region = rq.Region,
+                Language = rq.Language
+            };
+        }
+
         /// <summary>
         /// Query text
         /// 查询文本

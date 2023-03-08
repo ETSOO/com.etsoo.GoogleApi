@@ -5,7 +5,7 @@
     /// 地址字段枚举
     /// </summary>
     [Flags]
-    public enum PlaceField
+    public enum PlaceField : int
     {
         /// <summary>
         /// Formatted Address
@@ -84,6 +84,12 @@
         /// 业务状况
         /// </summary>
         Business_Status = 1 << 13,
+
+        /// <summary>
+        /// Address components
+        /// 地址组件
+        /// </summary>
+        Address_Components = 1 << 14,
 
         /// <summary>
         /// Basic

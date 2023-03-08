@@ -58,6 +58,21 @@ namespace GoogleApi.Tests
         }
 
         [TestMethod]
+        public async Task SearchCommonPlaceAsyncTest()
+        {
+            var results = await service.SearchCommonPlaceAsync(new SearchPlaceRQ
+            {
+                Query = "12A Cranbrook Place, Glendowie, Auckland 1071"
+            });
+
+            var first = results?.FirstOrDefault();
+            Assert.IsNotNull(first);
+
+            Assert.AreEqual("1071", first.Postcode);
+            Assert.AreEqual("NZ", first.Region);
+        }
+
+        [TestMethod]
         public async Task AutocompleteAsyncTest()
         {
             var sessionToken = Guid.NewGuid().ToString();

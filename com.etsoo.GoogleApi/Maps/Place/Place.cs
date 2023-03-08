@@ -1,6 +1,7 @@
 ﻿using com.etsoo.ApiModel.Dto.Maps;
 using com.etsoo.GoogleApi.Maps.Place.RQ;
 using System.Text.Json.Serialization;
+using CommonPlace = com.etsoo.ApiModel.Dto.Maps.Place;
 
 namespace com.etsoo.GoogleApi.Maps.Place
 {
@@ -140,7 +141,7 @@ namespace com.etsoo.GoogleApi.Maps.Place
     /// </summary>
     public record Place
     {
-        public IEnumerable<AddressComponent>? AddressComponents { get; init; }
+        public IEnumerable<AddressComponent>? AddressComponents { get; set; }
 
         public string? AdrAddress { get; init; }
 
@@ -220,5 +221,42 @@ namespace com.etsoo.GoogleApi.Maps.Place
         public string? Website { get; init; }
 
         public bool? WheelchairAccessibleEntrance { get; init; }
+
+        /// <summary>
+        /// Create autocomplete place
+        /// 创建自动填充地点
+        /// </summary>
+        /// <returns>Result</returns>
+        public PlaceAutocomplete CreateAutocomplete()
+        {
+            return new PlaceAutocomplete
+            {
+                Name = $"{FormattedAddress}",
+                PlaceId = PlaceId!
+            };
+        }
+
+        /// <summary>
+        /// Create common place
+        /// 创建通用地点
+        /// </summary>
+        /// <returns>Result</returns>
+        public CommonPlace? CreateCommon()
+        {
+            if (string.IsNullOrEmpty(FormattedAddress) || string.IsNullOrEmpty(Name) || Geometry == null || PlaceId == null) return null;
+
+            return new CommonPlace
+            {
+                Name = Name,
+                Location = Geometry.Location,
+                PlaceId = PlaceId,
+                FormattedAddress = FormattedAddress,
+                Region = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("political") && ac.Types.Contains("country"))?.ShortName,
+                State = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("political") && ac.Types.Contains("administrative_area_level_1"))?.LongName,
+                City = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("political") && ac.Types.Contains("locality"))?.LongName,
+                District = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("political") && ac.Types.Contains("sublocality"))?.LongName,
+                Postcode = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("postal_code"))?.LongName
+            };
+        }
     }
 }

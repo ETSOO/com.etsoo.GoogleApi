@@ -2,11 +2,13 @@
 using com.etsoo.GoogleApi.Maps.Place;
 using com.etsoo.GoogleApi.Maps.Place.RQ;
 using com.etsoo.GoogleApi.Options;
+using com.etsoo.Utils.Models;
 using com.etsoo.Utils.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text.Json;
+using CommonPlace = com.etsoo.ApiModel.Dto.Maps.Place;
 
 namespace com.etsoo.GoogleApi.Maps
 {
@@ -68,14 +70,15 @@ namespace com.etsoo.GoogleApi.Maps
         /// 异步自动填充
         /// </summary>
         /// <param name="rq">Request data</param>
+        /// <param name="token">Cancellation token</param>
         /// <returns>Result</returns>
-        public async Task<AutocompleteResponse?> AutoCompleteAsync(AutocompleteRQ rq)
+        public async Task<AutocompleteResponse?> AutoCompleteAsync(AutocompleteRQ rq, CancellationToken token = default)
         {
             var request = new AutocompleteRequest(options.ApiKey, rq);
 
             var api = $"place/autocomplete/{GetOutput(rq.Output)}?{request.ToQuery()}";
 
-            return await client.GetFromJsonAsync<AutocompleteResponse>(api, jsonSerializerOptions);
+            return await client.GetFromJsonAsync<AutocompleteResponse>(api, jsonSerializerOptions, token);
         }
 
         /// <summary>
@@ -83,14 +86,15 @@ namespace com.etsoo.GoogleApi.Maps
         /// 异步查找地点
         /// </summary>
         /// <param name="rq">Request data</param>
+        /// <param name="token">Cancellation token</param>
         /// <returns>Result</returns>
-        public async Task<FindPlaceResponse?> FindPlaceAsync(FindPlaceRQ rq)
+        public async Task<FindPlaceResponse?> FindPlaceAsync(FindPlaceRQ rq, CancellationToken token = default)
         {
             var request = new FindPlaceRequest(options.ApiKey, rq);
 
             var api = $"place/findplacefromtext/{GetOutput(rq.Output)}?{request.ToQuery()}";
 
-            return await client.GetFromJsonAsync<FindPlaceResponse>(api, jsonSerializerOptions);
+            return await client.GetFromJsonAsync<FindPlaceResponse>(api, jsonSerializerOptions, token);
         }
 
         /// <summary>
@@ -98,14 +102,40 @@ namespace com.etsoo.GoogleApi.Maps
         /// 异步查询地点
         /// </summary>
         /// <param name="rq">Request data</param>
+        /// <param name="token">Cancellation token</param>
         /// <returns>Result</returns>
-        public async Task<SearchPlaceResponse?> SearchPlaceAsync(SearchPlaceRQ rq)
+        public async Task<SearchPlaceResponse?> SearchPlaceAsync(SearchPlaceRQ rq, CancellationToken token = default)
         {
             var request = new SearchPlaceRequest(options.ApiKey, rq);
 
             var api = $"place/textsearch/{GetOutput(rq.Output)}?{request.ToQuery()}";
 
-            return await client.GetFromJsonAsync<SearchPlaceResponse>(api, jsonSerializerOptions);
+            return await client.GetFromJsonAsync<SearchPlaceResponse>(api, jsonSerializerOptions, token);
+        }
+
+        /// <summary>
+        /// Async search common place
+        /// 异步查询通用地点
+        /// </summary>
+        /// <param name="rq">Request data</param>
+        /// <param name="token">Cancellation token</param>
+        /// <returns>Result</returns>
+        public async ValueTask<IEnumerable<CommonPlace>?> SearchCommonPlaceAsync(SearchPlaceRQ rq, CancellationToken token = default)
+        {
+            var response = await SearchPlaceAsync(rq, token);
+            var results = response?.Results;
+            if (results == null) return null;
+
+            await Parallel.ForEachAsync(results, new ParallelOptions { MaxDegreeOfParallelism = 5, CancellationToken = token }, async (item, CancellationToken) =>
+            {
+                if (item.PlaceId == null) return;
+
+                var details = await GetPlaceDetailsAsync(new GetDetailsRQ { PlaceId = item.PlaceId, Fields = PlaceField.Address_Components }, CancellationToken);
+                var components = details?.Result.AddressComponents;
+                if (components is not null) item.AddressComponents = components;
+            });
+
+            return results.Select(item => item.CreateCommon()).WhereNotNull();
         }
 
         /// <summary>
@@ -113,14 +143,15 @@ namespace com.etsoo.GoogleApi.Maps
         /// 异步获取地点细节
         /// </summary>
         /// <param name="rq">Request data</param>
+        /// <param name="token">Cancellation token</param>
         /// <returns>Result</returns>
-        public async Task<GetDetailsResponse?> GetPlaceDetailsAsync(GetDetailsRQ rq)
+        public async Task<GetDetailsResponse?> GetPlaceDetailsAsync(GetDetailsRQ rq, CancellationToken token = default)
         {
             var request = new GetDetailsRequest(options.ApiKey, rq);
 
             var api = $"place/details/{GetOutput(rq.Output)}?{request.ToQuery()}";
 
-            return await client.GetFromJsonAsync<GetDetailsResponse>(api, jsonSerializerOptions);
+            return await client.GetFromJsonAsync<GetDetailsResponse>(api, jsonSerializerOptions, token);
         }
     }
 }
