@@ -130,7 +130,7 @@ namespace com.etsoo.GoogleApi.Maps
             {
                 if (item.PlaceId == null) return;
 
-                var details = await GetPlaceDetailsAsync(new GetDetailsRQ { PlaceId = item.PlaceId, Fields = PlaceField.Address_Components }, cancellationToken);
+                var details = await GetPlaceDetailsAsync(new GetDetailsRQ { PlaceId = item.PlaceId, Language = rq.Language, Region = rq.Region, Fields = PlaceField.Address_Components }, cancellationToken);
                 var components = details?.Result.AddressComponents;
                 if (components is not null) item.AddressComponents = components;
             });

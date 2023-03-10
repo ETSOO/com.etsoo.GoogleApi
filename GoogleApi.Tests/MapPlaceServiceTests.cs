@@ -73,6 +73,23 @@ namespace GoogleApi.Tests
         }
 
         [TestMethod]
+        public async Task SearchCommonPlaceAsyncChinaAddressTest()
+        {
+            var results = await service.SearchCommonPlaceAsync(new SearchPlaceRQ
+            {
+                Region = "CN",
+                Query = "青岛市玫瑰庭院10号楼",
+                Language = "zh-CN"
+            });
+
+            var first = results?.FirstOrDefault();
+            Assert.IsNotNull(first);
+
+            Assert.IsTrue(results?.Any(result => result.State == "山东省"));
+            Assert.AreEqual("CN", first.Region);
+        }
+
+        [TestMethod]
         public async Task AutocompleteAsyncTest()
         {
             var sessionToken = Guid.NewGuid().ToString();
