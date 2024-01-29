@@ -8,6 +8,7 @@ namespace com.etsoo.GoogleApi
     /// </summary>
     [JsonSerializable(typeof(Cloud.RQ.TranslateTextRQ))]
     [JsonSerializable(typeof(Maps.Place.RQ.MapBaseRQ))]
+    [JsonSerializable(typeof(Maps.Place.BaseResponse))]
     public partial class GoogleApiJsonSerializerContext : JsonSerializerContext
     {
     }
@@ -18,7 +19,7 @@ namespace com.etsoo.GoogleApi
     /// </summary>
     [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
     [JsonSerializable(typeof(Maps.Place.BaseResponse))]
-    public partial class GoogleApiCallJsonSerializerContext : JsonSerializerContext
+    internal partial class GoogleApiCallJsonSerializerContext : JsonSerializerContext
     {
     }
 }
