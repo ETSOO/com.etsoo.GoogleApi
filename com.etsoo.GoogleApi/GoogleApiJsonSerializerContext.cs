@@ -12,9 +12,13 @@ namespace com.etsoo.GoogleApi
     {
     }
 
+    /// <summary>
+    /// Google API call JSON serializer context
+    /// 谷歌API调用JSON序列化上下文
+    /// </summary>
     [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower)]
     [JsonSerializable(typeof(Maps.Place.BaseResponse))]
-    internal partial class GoogleApiCallJsonSerializerContext : JsonSerializerContext
+    public partial class GoogleApiCallJsonSerializerContext : JsonSerializerContext
     {
     }
 }
