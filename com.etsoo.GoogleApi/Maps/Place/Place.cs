@@ -17,7 +17,7 @@ namespace com.etsoo.GoogleApi.Maps.Place
     /// <summary>
     /// Business status
     /// </summary>
-    [JsonConverter(typeof(JsonStringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter<BusinessStatus>))]
     public enum BusinessStatus : byte
     {
         OPERATIONAL,

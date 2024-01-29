@@ -1,9 +1,15 @@
-﻿namespace com.etsoo.GoogleApi.Maps.Place
+﻿using System.Text.Json.Serialization;
+
+namespace com.etsoo.GoogleApi.Maps.Place
 {
     /// <summary>
     /// Base response
     /// 基本响应
     /// </summary>
+    [JsonDerivedType(typeof(AutocompleteResponse))]
+    [JsonDerivedType(typeof(FindPlaceResponse))]
+    [JsonDerivedType(typeof(GetDetailsResponse))]
+    [JsonDerivedType(typeof(SearchPlaceResponse))]
     public record BaseResponse
     {
         /// <summary>

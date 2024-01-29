@@ -4,11 +4,9 @@ using com.etsoo.GoogleApi.Maps.Place;
 using com.etsoo.GoogleApi.Maps.Place.RQ;
 using com.etsoo.GoogleApi.Options;
 using com.etsoo.Utils.Models;
-using com.etsoo.Utils.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace com.etsoo.GoogleApi.Maps
 {
@@ -23,12 +21,6 @@ namespace com.etsoo.GoogleApi.Maps
             if (output == ApiOutput.XML) return "xml";
             else return "json";
         }
-
-        private readonly JsonSerializerOptions jsonSerializerOptions = new()
-        {
-            PropertyNameCaseInsensitive= true,
-            PropertyNamingPolicy = new JsonSnakeNamingPolicy()
-        };
 
         private readonly MapsOptions options;
         private readonly HttpClient client;
@@ -78,7 +70,7 @@ namespace com.etsoo.GoogleApi.Maps
 
             var api = $"place/autocomplete/{GetOutput(rq.Output)}?{request.ToQuery()}";
 
-            return await client.GetFromJsonAsync<AutocompleteResponse>(api, jsonSerializerOptions, token);
+            return await client.GetFromJsonAsync(api, GoogleApiCallJsonSerializerContext.Default.AutocompleteResponse, token);
         }
 
         /// <summary>
@@ -94,7 +86,7 @@ namespace com.etsoo.GoogleApi.Maps
 
             var api = $"place/findplacefromtext/{GetOutput(rq.Output)}?{request.ToQuery()}";
 
-            return await client.GetFromJsonAsync<FindPlaceResponse>(api, jsonSerializerOptions, token);
+            return await client.GetFromJsonAsync(api, GoogleApiCallJsonSerializerContext.Default.FindPlaceResponse, token);
         }
 
         /// <summary>
@@ -110,7 +102,7 @@ namespace com.etsoo.GoogleApi.Maps
 
             var api = $"place/textsearch/{GetOutput(rq.Output)}?{request.ToQuery()}";
 
-            return await client.GetFromJsonAsync<SearchPlaceResponse>(api, jsonSerializerOptions, token);
+            return await client.GetFromJsonAsync(api, GoogleApiCallJsonSerializerContext.Default.SearchPlaceResponse, token);
         }
 
         /// <summary>
@@ -151,7 +143,7 @@ namespace com.etsoo.GoogleApi.Maps
 
             var api = $"place/details/{GetOutput(rq.Output)}?{request.ToQuery()}";
 
-            return await client.GetFromJsonAsync<GetDetailsResponse>(api, jsonSerializerOptions, token);
+            return await client.GetFromJsonAsync<GetDetailsResponse>(api, GoogleApiCallJsonSerializerContext.Default.GetDetailsResponse, token);
         }
     }
 }
