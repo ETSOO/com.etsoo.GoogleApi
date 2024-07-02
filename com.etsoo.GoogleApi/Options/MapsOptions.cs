@@ -10,18 +10,18 @@
         /// API key
         /// 接口密钥
         /// </summary>
-        public required string ApiKey { get; init; }
+        public string ApiKey { get; set; } = string.Empty;
 
         /// <summary>
         /// API base address
         /// 接口基地址
         /// </summary>
-        public string BaseAddress { get; init; } = "https://maps.googleapis.com/maps/api/";
+        public string BaseAddress { get; set; } = "https://maps.googleapis.com/maps/api/";
 
         /// <summary>
         /// Cache hours
         /// 缓存小时数
         /// </summary>
-        public double CacheHours { get; init; } = 24;
+        public double CacheHours { get; set; } = 24;
     }
 }

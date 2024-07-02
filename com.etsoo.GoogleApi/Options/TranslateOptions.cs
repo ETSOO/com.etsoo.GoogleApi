@@ -11,6 +11,6 @@
         /// 翻译项目编号
         /// https://cloud.google.com/translate/docs/setup
         /// </summary>
-        public required string TranslateProjectId { get; init; }
+        public string TranslateProjectId { get; set; } = string.Empty;
     }
 }

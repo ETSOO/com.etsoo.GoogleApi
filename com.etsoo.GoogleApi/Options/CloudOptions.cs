@@ -11,6 +11,6 @@
         /// 要使用的凭据文件的路径
         /// https://developers.google.com/workspace/guides/create-credentials
         /// </summary>
-        public required string CredentialsPath { get; init; }
+        public string CredentialsPath { get; set; } = string.Empty;
     }
 }
