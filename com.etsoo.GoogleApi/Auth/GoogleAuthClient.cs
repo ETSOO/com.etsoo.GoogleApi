@@ -4,6 +4,7 @@ using com.etsoo.Utils;
 using com.etsoo.Utils.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
@@ -19,15 +20,18 @@ namespace com.etsoo.GoogleApi.Auth
     {
         private readonly HttpClient _client;
         private readonly GoogleAuthOptions _options;
+        private readonly ILogger _logger;
 
-        public GoogleAuthClient(HttpClient client, GoogleAuthOptions options)
+        public GoogleAuthClient(HttpClient client, GoogleAuthOptions options, ILogger logger)
         {
             _client = client;
             _options = options;
+            _logger = logger;
         }
 
         [ActivatorUtilitiesConstructor]
-        public GoogleAuthClient(HttpClient client, IOptions<GoogleAuthOptions> options) : this(client, options.Value)
+        public GoogleAuthClient(HttpClient client, IOptions<GoogleAuthOptions> options, ILogger<GoogleAuthClient> logger)
+            : this(client, options.Value, logger)
         {
 
         }
@@ -95,7 +99,7 @@ namespace com.etsoo.GoogleApi.Auth
         {
             if (string.IsNullOrEmpty(_options.ServerRedirectUrl))
             {
-                return null;
+                throw new Exception("ServerRedirectUrl is required for server side authentication");
             }
 
             var response = await _client.PostAsync("https://oauth2.googleapis.com/token", new FormUrlEncodedContent(new Dictionary<string, string>
@@ -240,7 +244,7 @@ namespace com.etsoo.GoogleApi.Auth
                     result = new ActionResult
                     {
                         Type = "AccessDenied",
-                        Field = state
+                        Field = "state"
                     };
                 }
                 else if (string.IsNullOrEmpty(code))
@@ -253,19 +257,26 @@ namespace com.etsoo.GoogleApi.Auth
                 }
                 else
                 {
-                    tokenData = await CreateTokenAsync(code);
-
-                    if (tokenData == null)
+                    try
                     {
-                        result = new ActionResult
+                        tokenData = await CreateTokenAsync(code);
+                        if (tokenData == null)
                         {
-                            Type = "NoDataReturned",
-                            Field = "token"
-                        };
+                            result = new ActionResult
+                            {
+                                Type = "NoDataReturned",
+                                Field = "token"
+                            };
+                        }
+                        else
+                        {
+                            result = ActionResult.Success;
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        result = ActionResult.Success;
+                        _logger.LogError(ex, "Create token failed");
+                        result = ActionResult.From(ex);
                     }
                 }
             }
