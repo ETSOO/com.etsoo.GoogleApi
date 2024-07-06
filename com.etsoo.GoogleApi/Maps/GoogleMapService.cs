@@ -14,7 +14,7 @@ namespace com.etsoo.GoogleApi.Maps
     /// Map place service
     /// 地图地址服务
     /// </summary>
-    public class MapPlaceService : IMapPlaceService
+    public class GoogleMapService : IGoogleMapService
     {
         private static string GetOutput(ApiOutput output)
         {
@@ -22,14 +22,14 @@ namespace com.etsoo.GoogleApi.Maps
             else return "json";
         }
 
-        private readonly MapsOptions options;
+        private readonly GoogleMapsOptions options;
         private readonly HttpClient client;
 
         /// <summary>
         /// Options
         /// 配置参数
         /// </summary>
-        public MapsOptions Options => options;
+        public GoogleMapsOptions Options => options;
 
         /// <summary>
         /// Constructor
@@ -37,7 +37,7 @@ namespace com.etsoo.GoogleApi.Maps
         /// </summary>
         /// <param name="options">Options</param>
         /// <param name="httpClient">HTTP client</param>
-        public MapPlaceService(MapsOptions options, HttpClient client)
+        public GoogleMapService(GoogleMapsOptions options, HttpClient client)
         {
             client.BaseAddress = new Uri(options.BaseAddress);
 
@@ -52,7 +52,7 @@ namespace com.etsoo.GoogleApi.Maps
         /// <param name="options">Options</param>
         /// <param name="httpClient">HTTP client</param>
         [ActivatorUtilitiesConstructor]
-        public MapPlaceService(IOptions<MapsOptions> options, HttpClient httpClient)
+        public GoogleMapService(IOptions<GoogleMapsOptions> options, HttpClient httpClient)
             : this(options.Value, httpClient)
         {
         }

@@ -10,16 +10,16 @@ namespace com.etsoo.GoogleApi.Cloud
     /// Translate service
     /// 翻译服务
     /// </summary>
-    public class TranslateService : ITranslateService
+    public class GoogleTranslateService : IGoogleTranslateService
     {
-        private readonly TranslateOptions options;
+        private readonly GoogleTranslateOptions options;
 
         /// <summary>
         /// Constructor
         /// 构造函数
         /// </summary>
         /// <param name="options">Options</param>
-        public TranslateService(TranslateOptions options)
+        public GoogleTranslateService(GoogleTranslateOptions options)
         {
             this.options = options;
         }
@@ -30,7 +30,7 @@ namespace com.etsoo.GoogleApi.Cloud
         /// </summary>
         /// <param name="options">Options</param>
         [ActivatorUtilitiesConstructor]
-        public TranslateService(IOptions<TranslateOptions> options)
+        public GoogleTranslateService(IOptions<GoogleTranslateOptions> options)
             : this(options.Value)
         {
 

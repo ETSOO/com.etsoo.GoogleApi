@@ -7,11 +7,11 @@ namespace GoogleApi.Tests
     [TestClass]
     public class TranslateServiceTests
     {
-        readonly TranslateService service;
+        readonly GoogleTranslateService service;
 
         public TranslateServiceTests()
         {
-            service = new TranslateService(new TranslateOptions
+            service = new GoogleTranslateService(new GoogleTranslateOptions
             {
                 CredentialsPath = "C:\\api\\pelagic-pod-350823-9274363e3d6b.json",
                 TranslateProjectId = "projects/454308927445"

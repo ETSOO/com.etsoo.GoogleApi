@@ -7,11 +7,11 @@ namespace GoogleApi.Tests
     [TestClass]
     public class MapPlaceServiceTests
     {
-        readonly MapPlaceService service;
+        readonly GoogleMapService service;
 
         public MapPlaceServiceTests()
         {
-            service = new MapPlaceService(new MapsOptions
+            service = new GoogleMapService(new GoogleMapsOptions
             {
                 ApiKey = File.ReadAllText("C:\\api\\GoogleMaps.txt")
             }, new HttpClient());
@@ -78,7 +78,7 @@ namespace GoogleApi.Tests
             var results = await service.SearchCommonPlaceAsync(new SearchPlaceRQ
             {
                 Region = "CN",
-                Query = "青岛市玫瑰庭院10号楼",
+                Query = "青岛市玫瑰庭院",
                 Language = "zh-CN"
             });
 

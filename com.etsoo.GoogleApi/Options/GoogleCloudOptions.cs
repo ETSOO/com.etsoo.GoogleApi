@@ -1,16 +1,19 @@
-﻿namespace com.etsoo.GoogleApi.Options
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace com.etsoo.GoogleApi.Options
 {
     /// <summary>
     /// Cloud API options
     /// 云接口参数
     /// </summary>
-    public record CloudOptions
+    public record GoogleCloudOptions
     {
         /// <summary>
         /// The path to the credentials file to use
         /// 要使用的凭据文件的路径
         /// https://developers.google.com/workspace/guides/create-credentials
         /// </summary>
-        public string CredentialsPath { get; set; } = string.Empty;
+        [Required]
+        public required string CredentialsPath { get; set; }
     }
 }

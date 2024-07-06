@@ -1,4 +1,7 @@
-﻿namespace com.etsoo.GoogleApi.Options
+﻿using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
+
+namespace com.etsoo.GoogleApi.Options
 {
     /// <summary>
     /// Google Auth options
@@ -11,21 +14,30 @@
         /// <summary>
         /// Client ID, like *.apps.googleusercontent.com
         /// </summary>
-        public string ClientId { get; set; } = string.Empty!;
+        [Required]
+        public required string ClientId { get; set; }
 
         /// <summary>
         /// Client secret
         /// </summary>
-        public string ClientSecret { get; set; } = string.Empty!;
+        [Required]
+        public required string ClientSecret { get; set; }
 
         /// <summary>
         /// Authorized redirect URIs for the server side application
         /// </summary>
+        [Url]
         public string? ServerRedirectUrl { get; set; }
 
         /// <summary>
         /// Authorized redirect URIs for the script side application
         /// </summary>
+        [Url]
         public string? ScriptRedirectUrl { get; set; }
+    }
+
+    [OptionsValidator]
+    public partial class ValidateGoogleAuthOptions : IValidateOptions<GoogleAuthOptions>
+    {
     }
 }

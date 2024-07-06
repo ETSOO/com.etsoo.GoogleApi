@@ -6,7 +6,7 @@ namespace com.etsoo.GoogleApi.Cloud
     /// Translate service interface
     /// 翻译服务接口
     /// </summary>
-    public interface ITranslateService
+    public interface IGoogleTranslateService
     {
         /// <summary>
         /// Translate short text

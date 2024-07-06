@@ -9,13 +9,13 @@ namespace com.etsoo.GoogleApi.Maps
     /// Map place service interface
     /// 地图地址服务接口
     /// </summary>
-    public interface IMapPlaceService
+    public interface IGoogleMapService
     {
         /// <summary>
         /// Options
         /// 配置参数
         /// </summary>
-        MapsOptions Options { get; }
+        GoogleMapsOptions Options { get; }
 
         /// <summary>
         /// Async autocomplete
