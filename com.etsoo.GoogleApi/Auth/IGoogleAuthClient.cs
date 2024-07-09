@@ -39,8 +39,8 @@ namespace com.etsoo.GoogleApi.Auth
         /// 验证认证回调
         /// </summary>
         /// <param name="request">Callback request</param>
-        /// <param name="state">State</param>
+        /// <param name="stateCallback">Callback to verify request state</param>
         /// <returns>Action result & Token data</returns>
-        Task<(IActionResult result, GoogleTokenData? tokenData)> ValidateAuthAsync(HttpRequest request, string state);
+        Task<(IActionResult result, GoogleTokenData? tokenData)> ValidateAuthAsync(HttpRequest request, Func<string, bool> stateCallback);
     }
 }
