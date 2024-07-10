@@ -18,6 +18,8 @@ namespace com.etsoo.GoogleApi.Auth
     /// </summary>
     public class GoogleAuthClient : IGoogleAuthClient
     {
+        private const string SignScope = "openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+
         private readonly HttpClient _client;
         private readonly GoogleAuthOptions _options;
         private readonly ILogger _logger;
@@ -37,17 +39,41 @@ namespace com.etsoo.GoogleApi.Auth
         }
 
         /// <summary>
+        /// Get sign in URL
+        /// 获取登录URL
+        /// </summary>
+        /// <param name="state">Request state</param>
+        /// <param name="loginHint">Login hint</param>
+        /// <returns>URL</returns>
+        public string GetSignInUrl(string state, string? loginHint = null)
+        {
+            return GetServerAuthUrl(AuthExtentions.SignInAction, state, SignScope, false, loginHint);
+        }
+
+        /// <summary>
+        /// Get sign up URL
+        /// 获取注册URL
+        /// </summary>
+        /// <param name="state">Request state</param>
+        /// <returns>URL</returns>
+        public string GetSignUpUrl(string state)
+        {
+            return GetServerAuthUrl(AuthExtentions.SignUpAction, state, SignScope);
+        }
+
+        /// <summary>
         /// Get server auth URL, for back-end processing
         /// 获取服务器授权URL，用于后端处理
         /// </summary>
+        /// <param name="action">Action of the request</param>
         /// <param name="state">Specifies any string value that your application uses to maintain state between your authorization request and the authorization server's response</param>
         /// <param name="scope">A space-delimited list of scopes that identify the resources that your application could access on the user's behalf</param>
         /// <param name="offline">Set to true if your application needs to refresh access tokens when the user is not present at the browser</param>
         /// <param name="loginHint">Set the parameter value to an email address or sub identifier, which is equivalent to the user's Google ID</param>
         /// <returns>URL</returns>
-        public string GetServerAuthUrl(string state, string scope, bool offline = false, string? loginHint = null)
+        public string GetServerAuthUrl(string action, string state, string scope, bool offline = false, string? loginHint = null)
         {
-            var url = GetAuthUrl(_options.ServerRedirectUrl, "code", scope, state, loginHint);
+            var url = GetAuthUrl($"{_options.ServerRedirectUrl}/{action}", "code", scope, state, loginHint);
             if (offline)
             {
                 url += "&access_type=offline";
@@ -59,13 +85,14 @@ namespace com.etsoo.GoogleApi.Auth
         /// Get script auth URL, for front-end page
         /// 获取脚本授权URL，用于前端页面
         /// </summary>
+        /// <param name="action">Action of the request</param>
         /// <param name="state">Specifies any string value that your application uses to maintain state between your authorization request and the authorization server's response</param>
         /// <param name="scope">A space-delimited list of scopes that identify the resources that your application could access on the user's behalf</param>
         /// <param name="loginHint">Set the parameter value to an email address or sub identifier, which is equivalent to the user's Google ID</param>
         /// <returns>URL</returns>
-        public string GetScriptAuthUrl(string state, string scope, string? loginHint = null)
+        public string GetScriptAuthUrl(string action, string state, string scope, string? loginHint = null)
         {
-            return GetAuthUrl(_options.ScriptRedirectUrl, "token", scope, state, loginHint);
+            return GetAuthUrl($"{_options.ScriptRedirectUrl}/{action}", "token", scope, state, loginHint);
         }
 
         /// <summary>
@@ -93,9 +120,10 @@ namespace com.etsoo.GoogleApi.Auth
         /// Create access token from authorization code
         /// 从授权码创建访问令牌
         /// </summary>
+        /// <param name="action">Request action</param>
         /// <param name="code">Authorization code</param>
         /// <returns>Token data</returns>
-        public async ValueTask<GoogleTokenData?> CreateTokenAsync(string code)
+        public async ValueTask<GoogleTokenData?> CreateTokenAsync(string action, string code)
         {
             if (string.IsNullOrEmpty(_options.ServerRedirectUrl))
             {
@@ -107,7 +135,7 @@ namespace com.etsoo.GoogleApi.Auth
                 ["code"] = code,
                 ["client_id"] = _options.ClientId,
                 ["client_secret"] = _options.ClientSecret,
-                ["redirect_uri"] = _options.ServerRedirectUrl,
+                ["redirect_uri"] = $"{_options.ServerRedirectUrl}/{action}",
                 ["grant_type"] = "authorization_code"
             }));
 
@@ -182,10 +210,11 @@ namespace com.etsoo.GoogleApi.Auth
         /// </summary>
         /// <param name="request">Callback request</param>
         /// <param name="state">Request state</param>
+        /// <param name="action">Request action</param>
         /// <returns>Action result & user information</returns>
-        public ValueTask<(IActionResult result, AuthUserInfo? userInfo)> GetUserInfoAsync(HttpRequest request, string state)
+        public ValueTask<(IActionResult result, AuthUserInfo? userInfo)> GetUserInfoAsync(HttpRequest request, string state, string? action = null)
         {
-            return GetUserInfoAsync(request, s => s == state);
+            return GetUserInfoAsync(request, s => s == state, action);
         }
 
         /// <summary>
@@ -194,8 +223,9 @@ namespace com.etsoo.GoogleApi.Auth
         /// </summary>
         /// <param name="request">Callback request</param>
         /// <param name="stateCallback">Callback to verify request state</param>
+        /// <param name="action">Request action</param>
         /// <returns>Action result & user information</returns>
-        public async ValueTask<(IActionResult result, AuthUserInfo? userInfo)> GetUserInfoAsync(HttpRequest request, Func<string, bool> stateCallback)
+        public async ValueTask<(IActionResult result, AuthUserInfo? userInfo)> GetUserInfoAsync(HttpRequest request, Func<string, bool> stateCallback, string? action = null)
         {
             var (result, tokenData) = await ValidateAuthAsync(request, stateCallback);
             AuthUserInfo? userInfo = null;
@@ -234,8 +264,9 @@ namespace com.etsoo.GoogleApi.Auth
         /// </summary>
         /// <param name="request">Callback request</param>
         /// <param name="stateCallback">Callback to verify request state</param>
+        /// <param name="action">Request action</param>
         /// <returns>Action result & Token data</returns>
-        public async Task<(IActionResult result, GoogleTokenData? tokenData)> ValidateAuthAsync(HttpRequest request, Func<string, bool> stateCallback)
+        public async Task<(IActionResult result, GoogleTokenData? tokenData)> ValidateAuthAsync(HttpRequest request, Func<string, bool> stateCallback, string? action = null)
         {
             IActionResult result;
             GoogleTokenData? tokenData = null;
@@ -271,7 +302,8 @@ namespace com.etsoo.GoogleApi.Auth
                 {
                     try
                     {
-                        tokenData = await CreateTokenAsync(code);
+                        action ??= request.GetRequestAction();
+                        tokenData = await CreateTokenAsync(action, code);
                         if (tokenData == null)
                         {
                             result = new ActionResult
