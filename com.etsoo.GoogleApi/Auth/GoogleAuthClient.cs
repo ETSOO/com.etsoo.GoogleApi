@@ -122,8 +122,9 @@ namespace com.etsoo.GoogleApi.Auth
         /// </summary>
         /// <param name="action">Request action</param>
         /// <param name="code">Authorization code</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Token data</returns>
-        public async ValueTask<GoogleTokenData?> CreateTokenAsync(string action, string code)
+        public async ValueTask<GoogleTokenData?> CreateTokenAsync(string action, string code, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(_options.ServerRedirectUrl))
             {
@@ -137,11 +138,11 @@ namespace com.etsoo.GoogleApi.Auth
                 ["client_secret"] = _options.ClientSecret,
                 ["redirect_uri"] = $"{_options.ServerRedirectUrl}/{action}",
                 ["grant_type"] = "authorization_code"
-            }));
+            }), cancellationToken);
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync(GoogleApiCallJsonSerializerContext.Default.GoogleTokenData);
+            return await response.Content.ReadFromJsonAsync(GoogleApiCallJsonSerializerContext.Default.GoogleTokenData, cancellationToken);
         }
 
         /// <summary>
@@ -149,8 +150,9 @@ namespace com.etsoo.GoogleApi.Auth
         /// 用刷新令牌获取访问令牌
         /// </summary>
         /// <param name="refreshToken">Refresh token</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Result</returns>
-        public async Task<GoogleRefreshTokenData?> RefreshTokenAsync(string refreshToken)
+        public async Task<GoogleRefreshTokenData?> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
         {
             var response = await _client.PostAsync("https://oauth2.googleapis.com/token", new FormUrlEncodedContent(new Dictionary<string, string>
             {
@@ -158,11 +160,11 @@ namespace com.etsoo.GoogleApi.Auth
                 ["client_secret"] = _options.ClientSecret,
                 ["refresh_token"] = refreshToken,
                 ["grant_type"] = "refresh_token"
-            }));
+            }), cancellationToken);
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync(GoogleApiCallJsonSerializerContext.Default.GoogleRefreshTokenData);
+            return await response.Content.ReadFromJsonAsync(GoogleApiCallJsonSerializerContext.Default.GoogleRefreshTokenData, cancellationToken);
         }
 
         /// <summary>
@@ -170,8 +172,9 @@ namespace com.etsoo.GoogleApi.Auth
         /// 获取用户信息
         /// </summary>
         /// <param name="tokenData">Token data</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Result</returns>
-        public async ValueTask<GoogleUserInfo?> GetUserInfoAsync(GoogleTokenData tokenData)
+        public async ValueTask<GoogleUserInfo?> GetUserInfoAsync(GoogleTokenData tokenData, CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(tokenData.IdToken))
             {
@@ -199,9 +202,9 @@ namespace com.etsoo.GoogleApi.Auth
                 }
             }
 
-            var response = await _client.GetAsync($"https://www.googleapis.com/oauth2/v3/userinfo?access_token={tokenData.AccessToken}");
+            var response = await _client.GetAsync($"https://www.googleapis.com/oauth2/v3/userinfo?access_token={tokenData.AccessToken}", cancellationToken);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync(GoogleApiCallJsonSerializerContext.Default.GoogleUserInfo);
+            return await response.Content.ReadFromJsonAsync(GoogleApiCallJsonSerializerContext.Default.GoogleUserInfo, cancellationToken);
         }
 
         /// <summary>
@@ -211,10 +214,11 @@ namespace com.etsoo.GoogleApi.Auth
         /// <param name="request">Callback request</param>
         /// <param name="state">Request state</param>
         /// <param name="action">Request action</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Action result & user information</returns>
-        public ValueTask<(IActionResult result, AuthUserInfo? userInfo)> GetUserInfoAsync(HttpRequest request, string state, string? action = null)
+        public ValueTask<(IActionResult result, AuthUserInfo? userInfo)> GetUserInfoAsync(HttpRequest request, string state, string? action = null, CancellationToken cancellationToken = default)
         {
-            return GetUserInfoAsync(request, s => s == state, action);
+            return GetUserInfoAsync(request, s => s == state, action, cancellationToken);
         }
 
         /// <summary>
@@ -224,14 +228,15 @@ namespace com.etsoo.GoogleApi.Auth
         /// <param name="request">Callback request</param>
         /// <param name="stateCallback">Callback to verify request state</param>
         /// <param name="action">Request action</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Action result & user information</returns>
-        public async ValueTask<(IActionResult result, AuthUserInfo? userInfo)> GetUserInfoAsync(HttpRequest request, Func<string, bool> stateCallback, string? action = null)
+        public async ValueTask<(IActionResult result, AuthUserInfo? userInfo)> GetUserInfoAsync(HttpRequest request, Func<string, bool> stateCallback, string? action = null, CancellationToken cancellationToken = default)
         {
-            var (result, tokenData) = await ValidateAuthAsync(request, stateCallback);
+            var (result, tokenData) = await ValidateAuthAsync(request, stateCallback, action, cancellationToken);
             AuthUserInfo? userInfo = null;
             if (result.Ok && tokenData != null)
             {
-                var data = await GetUserInfoAsync(tokenData);
+                var data = await GetUserInfoAsync(tokenData, cancellationToken);
                 if (data == null)
                 {
                     result = new ActionResult
@@ -265,8 +270,9 @@ namespace com.etsoo.GoogleApi.Auth
         /// <param name="request">Callback request</param>
         /// <param name="stateCallback">Callback to verify request state</param>
         /// <param name="action">Request action</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Action result & Token data</returns>
-        public async Task<(IActionResult result, GoogleTokenData? tokenData)> ValidateAuthAsync(HttpRequest request, Func<string, bool> stateCallback, string? action = null)
+        public async Task<(IActionResult result, GoogleTokenData? tokenData)> ValidateAuthAsync(HttpRequest request, Func<string, bool> stateCallback, string? action = null, CancellationToken cancellationToken = default)
         {
             IActionResult result;
             GoogleTokenData? tokenData = null;
@@ -303,7 +309,7 @@ namespace com.etsoo.GoogleApi.Auth
                     try
                     {
                         action ??= request.GetRequestAction();
-                        tokenData = await CreateTokenAsync(action, code);
+                        tokenData = await CreateTokenAsync(action, code, cancellationToken);
                         if (tokenData == null)
                         {
                             result = new ActionResult
