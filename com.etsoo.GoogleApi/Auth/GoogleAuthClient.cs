@@ -1,12 +1,11 @@
 ﻿using com.etsoo.ApiModel.Auth;
 using com.etsoo.GoogleApi.Options;
-using com.etsoo.Utils;
 using com.etsoo.Utils.Actions;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
 using System.Web;
 
@@ -178,14 +177,15 @@ namespace com.etsoo.GoogleApi.Auth
         {
             if (!string.IsNullOrEmpty(tokenData.IdToken))
             {
-                var claims = new JwtSecurityToken(tokenData.IdToken).Claims;
-                var sub = claims.GetValue("sub");
-                var name = claims.GetValue("name");
-                var givenName = claims.GetValue("given_name");
-                var familyName = claims.GetValue("family_name");
-                var picture = claims.GetValue("picture");
-                var email = claims.GetValue("email");
-                var emailVerified = claims.GetValue("email_verified") == "true";
+                var data = await GoogleJsonWebSignature.ValidateAsync(tokenData.IdToken);
+
+                var sub = data.JwtId;
+                var name = data.Name;
+                var givenName = data.GivenName;
+                var familyName = data.FamilyName;
+                var picture = data.Picture;
+                var email = data.Email;
+                var emailVerified = data.EmailVerified;
 
                 if (!string.IsNullOrEmpty(sub) && !string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(email))
                 {
