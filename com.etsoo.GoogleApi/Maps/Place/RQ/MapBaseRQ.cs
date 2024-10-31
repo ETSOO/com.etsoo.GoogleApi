@@ -25,6 +25,6 @@ namespace com.etsoo.GoogleApi.Maps.Place.RQ
         /// 语言
         /// </summary>
         [LanguageCode]
-        public string? Language { get; init; }
+        public string? Language { get; set; }
     }
 }

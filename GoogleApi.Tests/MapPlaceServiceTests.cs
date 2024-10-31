@@ -70,6 +70,10 @@ namespace GoogleApi.Tests
 
             Assert.AreEqual("1071", first.Postcode);
             Assert.AreEqual("NZ", first.Region);
+            Assert.AreEqual("Auckland", first.State);
+            Assert.AreEqual("Auckland", first.City);
+            Assert.AreEqual("Glendowie", first.District);
+            Assert.AreEqual("12a Cranbrook Place, Glendowie, Auckland 1071, New Zealand", first.FormattedAddress);
         }
 
         [TestMethod]
@@ -85,8 +89,26 @@ namespace GoogleApi.Tests
             var first = results?.FirstOrDefault();
             Assert.IsNotNull(first);
 
-            Assert.IsTrue(results?.Any(result => result.State == "山东省"));
             Assert.AreEqual("CN", first.Region);
+            Assert.AreEqual("山东省", first.State);
+            Assert.AreEqual("山东省青岛市崂山区清溪路玫瑰庭院", first.FormattedAddress);
+        }
+
+        [TestMethod]
+        public async Task SearchCommonPlaceAsyncChinaAddressFullTest()
+        {
+            var results = await service.SearchCommonPlaceAsync(new SearchPlaceRQ
+            {
+                Region = "CN",
+                Query = "北京海淀中关村大街59号中国人民大学崇德东楼402室"
+            });
+
+            var first = results?.FirstOrDefault();
+            Assert.IsNotNull(first);
+
+            Assert.AreEqual("CN", first.Region);
+            Assert.AreEqual("北京市", first.State);
+            Assert.AreEqual("北京市海淀区中关村大街59号中国人民大学崇德东楼402室", first.FormattedAddress);
         }
 
         [TestMethod]

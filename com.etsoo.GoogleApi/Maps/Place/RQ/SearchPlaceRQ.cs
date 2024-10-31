@@ -31,7 +31,7 @@ namespace com.etsoo.GoogleApi.Maps.Place.RQ
         /// Query text
         /// 查询文本
         /// </summary>
-        public required string Query { get; init; }
+        public required string Query { get; set; }
 
         /// <summary>
         /// Defines the distance (in meters) within which to return place results

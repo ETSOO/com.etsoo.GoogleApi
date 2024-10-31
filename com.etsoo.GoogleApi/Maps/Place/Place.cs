@@ -239,17 +239,38 @@ namespace com.etsoo.GoogleApi.Maps.Place
         /// Create common place
         /// 创建通用地点
         /// </summary>
+        /// <param name="rq">Original query</param>
         /// <returns>Result</returns>
-        public PlaceCommon? CreateCommon()
+        public PlaceCommon? CreateCommon(SearchPlaceRQ rq)
         {
             if (string.IsNullOrEmpty(FormattedAddress) || string.IsNullOrEmpty(Name) || Geometry == null || PlaceId == null) return null;
+
+            var formattedAddress = FormattedAddress;
+            var pos = formattedAddress.IndexOf(" 邮政");
+            if (pos > 0)
+            {
+                // Remove postal code part
+                // 移除邮政编码部分，比如：邮政编码 100000
+                formattedAddress = formattedAddress[..pos];
+            }
+
+            if (!formattedAddress.Contains(Name))
+            {
+                formattedAddress += Name;
+            }
+
+            pos = rq.Query.LastIndexOf(Name);
+            if (pos > 0)
+            {
+                formattedAddress += rq.Query[(pos + Name.Length)..];
+            }
 
             return new PlaceCommon
             {
                 Name = Name,
                 Location = Geometry.Location,
                 PlaceId = PlaceId,
-                FormattedAddress = FormattedAddress,
+                FormattedAddress = formattedAddress,
                 Region = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("political") && ac.Types.Contains("country"))?.ShortName,
                 State = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("political") && ac.Types.Contains("administrative_area_level_1"))?.LongName,
                 City = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("political") && ac.Types.Contains("locality"))?.LongName,

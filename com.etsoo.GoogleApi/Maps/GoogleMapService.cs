@@ -14,7 +14,7 @@ namespace com.etsoo.GoogleApi.Maps
     /// Map place service
     /// 地图地址服务
     /// </summary>
-    public class GoogleMapService : IGoogleMapService
+    public partial class GoogleMapService : IGoogleMapService
     {
         private static string GetOutput(ApiOutput output)
         {
@@ -114,6 +114,19 @@ namespace com.etsoo.GoogleApi.Maps
         /// <returns>Result</returns>
         public async ValueTask<IEnumerable<PlaceCommon>?> SearchCommonPlaceAsync(SearchPlaceRQ rq, CancellationToken token = default)
         {
+            var query = rq.Query;
+            if (rq.Region == "CN" && (string.IsNullOrEmpty(rq.Language) || rq.Language == "zh-CN"))
+            {
+                // Chinese region and language, accuracy is only to the road number
+                // 中国地区和语言，精度只到路号
+                var pos = query.IndexOf('号');
+                if (pos > 0)
+                {
+                    rq.Language = "zh-CN";
+                    rq.Query = query[..(pos + 1)];
+                }
+            }
+
             var response = await SearchPlaceAsync(rq, token);
             var results = response?.Results;
             if (results == null) return null;
@@ -127,7 +140,10 @@ namespace com.etsoo.GoogleApi.Maps
                 if (components is not null) item.AddressComponents = components;
             });
 
-            return results.Select(item => item.CreateCommon()).WhereNotNull();
+            // Recover the query
+            rq.Query = query;
+
+            return results.Select(item => item.CreateCommon(rq)).WhereNotNull();
         }
 
         /// <summary>
@@ -143,7 +159,7 @@ namespace com.etsoo.GoogleApi.Maps
 
             var api = $"place/details/{GetOutput(rq.Output)}?{request.ToQuery()}";
 
-            return await client.GetFromJsonAsync<GetDetailsResponse>(api, GoogleApiCallJsonSerializerContext.Default.GetDetailsResponse, token);
+            return await client.GetFromJsonAsync(api, GoogleApiCallJsonSerializerContext.Default.GetDetailsResponse, token);
         }
     }
 }
