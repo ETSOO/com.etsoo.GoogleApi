@@ -68,11 +68,13 @@ namespace GoogleApi.Tests
             var first = results?.FirstOrDefault();
             Assert.IsNotNull(first);
 
-            Assert.AreEqual("1071", first.Postcode);
+            Assert.AreEqual("1071", first.PostalCode);
             Assert.AreEqual("NZ", first.Region);
             Assert.AreEqual("Auckland", first.State);
             Assert.AreEqual("Auckland", first.City);
             Assert.AreEqual("Glendowie", first.District);
+            Assert.AreEqual("Cranbrook Place", first.Route);
+            Assert.AreEqual("12a", first.Street);
             Assert.AreEqual("12a Cranbrook Place, Glendowie, Auckland 1071, New Zealand", first.FormattedAddress);
         }
 

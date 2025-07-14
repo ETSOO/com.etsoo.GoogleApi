@@ -275,7 +275,9 @@ namespace com.etsoo.GoogleApi.Maps.Place
                 State = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("political") && ac.Types.Contains("administrative_area_level_1"))?.LongName,
                 City = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("political") && ac.Types.Contains("locality"))?.LongName,
                 District = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("political") && ac.Types.Contains("sublocality"))?.LongName,
-                Postcode = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("postal_code"))?.LongName
+                Route = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("route"))?.LongName,
+                Street = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("street_number"))?.LongName,
+                PostalCode = AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("postal_code"))?.LongName
             };
         }
     }
