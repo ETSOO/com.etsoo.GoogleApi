@@ -21,11 +21,13 @@ namespace com.etsoo.GoogleApi.Maps.Place
 
             if (rq.OpenNow is not null) Parameters["opennow"] = rq.OpenNow.ToJson();
 
-            if (!string.IsNullOrEmpty(rq.Pagetoken)) Parameters["pagetoken"] = rq.Pagetoken;
+            if (!string.IsNullOrEmpty(rq.Pagetoken)) Parameters["pageToken"] = rq.Pagetoken;
 
             if (!string.IsNullOrEmpty(rq.Region)) Parameters["region"] = rq.Region;
 
             if (!string.IsNullOrEmpty(rq.Type)) Parameters["type"] = rq.Type;
+
+            if (rq.PageSize != null) Parameters["pageSize"] = rq.PageSize.Value.ToString();
         }
     }
 }

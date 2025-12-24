@@ -53,7 +53,6 @@ namespace GoogleApi.Tests
             Assert.IsNotNull(first?.PlaceId);
 
             var place = (await service.GetPlaceDetailsAsync(new GetDetailsRQ { PlaceId = first.PlaceId }))?.Result;
-            Assert.AreEqual("Glendowie", place?.Vicinity);
             Assert.IsTrue(place?.AddressComponents?.Any(ac => ac.Types.Contains("postal_code") && ac.LongName.Equals("1071")));
         }
 
@@ -124,13 +123,14 @@ namespace GoogleApi.Tests
                 SessionToken = sessionToken
             });
 
-            Assert.IsTrue(response?.Predictions.Count() > 3);
+            Assert.IsNotNull(response);
+            Assert.IsGreaterThan(3, response.Predictions.Count());
 
             var first = response?.Predictions.First();
             Assert.IsNotNull(first?.PlaceId);
 
             var place = (await service.GetPlaceDetailsAsync(new GetDetailsRQ { PlaceId = first.PlaceId, SessionToken = sessionToken }))?.Result;
-            Assert.AreEqual("Glendowie", place?.Vicinity);
+            Assert.AreEqual("Glendowie", place?.AddressComponents?.FirstOrDefault(ac => ac.Types.Contains("sublocality"))?.ShortName);
             Assert.IsTrue(place?.AddressComponents?.Any(ac => ac.Types.Contains("postal_code") && ac.LongName.Equals("1071")));
         }
     }

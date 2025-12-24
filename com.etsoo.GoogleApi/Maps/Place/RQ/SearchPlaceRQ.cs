@@ -23,7 +23,8 @@ namespace com.etsoo.GoogleApi.Maps.Place.RQ
                 Location= rq.Location,
                 Radius = rq.Radius,
                 Region = rq.Region,
-                Language = rq.Language
+                Language = rq.Language,
+                PageSize = (rq.PageSize is >= 1 and <= 20) ? rq.PageSize : null
             };
         }
 
@@ -72,5 +73,11 @@ namespace com.etsoo.GoogleApi.Maps.Place.RQ
         /// Restricts the results to places matching the specified type
         /// </summary>
         public string? Type { get; init; }
+
+        /// <summary>
+        /// Specify the number of results to display per page (between 1 and 20).
+        /// 指定每页显示的结果数（介于 1 到 20 之间）
+        /// </summary>
+        public int? PageSize { get; init; }
     }
 }

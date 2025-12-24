@@ -1,5 +1,7 @@
 ﻿using com.etsoo.GoogleApi.Cloud.RQ;
 using com.etsoo.GoogleApi.Options;
+using Google.Api.Gax.Grpc.Rest;
+using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Translate.V3;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -47,7 +49,7 @@ namespace com.etsoo.GoogleApi.Cloud
         {
             var builder = new TranslationServiceClientBuilder
             {
-                CredentialsPath = options.CredentialsPath
+                Credential = CredentialFactory.FromFile<ServiceAccountCredential>(options.CredentialsPath)
             };
 
             var client = await builder.BuildAsync(token);
