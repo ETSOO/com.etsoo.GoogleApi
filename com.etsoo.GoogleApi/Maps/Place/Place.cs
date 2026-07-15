@@ -156,7 +156,7 @@ namespace com.etsoo.GoogleApi.Maps.Place
 
         public PlaceEditorialSummary? EditorialSummary { get; init; }
 
-        public string? FormattedAddress { get; init; }
+        public string? FormattedAddress { get; set; }
 
         public string? FormattedPhoneNumber { get; init; }
 

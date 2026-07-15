@@ -15,5 +15,11 @@ namespace com.etsoo.GoogleApi.Options
         /// </summary>
         [Required]
         public required string CredentialsPath { get; set; }
+
+        /// <summary>
+        /// Whether to use REST API instead of gRPC
+        /// 是否使用 REST API 而不是 gRPC
+        /// </summary>
+        public bool? IsREST { get; set; }
     }
 }

@@ -137,7 +137,19 @@ namespace com.etsoo.GoogleApi.Maps
 
                 var details = await GetPlaceDetailsAsync(new GetDetailsRQ { PlaceId = item.PlaceId, Language = rq.Language, Region = rq.Region, Fields = PlaceField.Address_Components }, cancellationToken);
                 var components = details?.Result.AddressComponents;
-                if (components is not null) item.AddressComponents = components;
+                if (components is not null)
+                {
+                    if (!string.IsNullOrEmpty(item.FormattedAddress))
+                    {
+                        var plusCode = components.FirstOrDefault(c => c.Types.Contains("plus_code"));
+                        if (plusCode != null)
+                        {
+                            item.FormattedAddress = item.FormattedAddress.Replace(plusCode.LongName, string.Empty).Trim();
+                        }
+                    }
+
+                    item.AddressComponents = components;
+                }
             });
 
             // Recover the query
