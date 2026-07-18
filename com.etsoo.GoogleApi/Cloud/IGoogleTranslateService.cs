@@ -9,6 +9,15 @@ namespace com.etsoo.GoogleApi.Cloud
     public interface IGoogleTranslateService
     {
         /// <summary>
+        /// Detect the language of the given text
+        /// 检测文本的语言
+        /// </summary>
+        /// <param name="text">Text to detect</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Detected language code</returns>
+        Task<string?> DetectLanguageAsync(string text, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Translate short text
         /// 翻译短文本
         /// </summary>
